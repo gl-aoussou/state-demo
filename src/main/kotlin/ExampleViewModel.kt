@@ -1,10 +1,9 @@
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class ViewModel {
+class ExampleViewModel {
 
     private val _state = MutableStateFlow(ExampleState())
     val state = _state.asStateFlow()

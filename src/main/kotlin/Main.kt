@@ -1,6 +1,5 @@
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Button
@@ -9,8 +8,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.layout
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 
@@ -20,8 +17,8 @@ fun App() {
     var name by remember { mutableStateOf("") }
     var age by remember { mutableStateOf("") }
 
-    val viewModel = ViewModel()
-    val state by viewModel.state.collectAsState()
+    val exampleViewModel = Dependencies.viewModel
+    val state by exampleViewModel.state.collectAsState()
 
     MaterialTheme {
 
@@ -30,18 +27,19 @@ fun App() {
             .background(state.color)
         ) {
 
-            Text(state.name ?: "not named")
 
-            Text(if (state.age != null) viewModel.state.value.age.toString() else "age unknown")
+            displayName()
+
+            Text(if (state.age != null) exampleViewModel.state.value.age.toString() else "age unknown")
 
             TextField(
-                value = name,
-                onValueChange = { name = it },
+                value = state.name,
+                onValueChange = {exampleViewModel.onAction(ExampleAction.UpdateName(it)) },
                 label = { Text("Name") }
             )
 
             Button(onClick = {
-                viewModel.onAction(ExampleAction.UpdateName(name))
+                exampleViewModel.onAction(ExampleAction.UpdateName(name))
             }) {
                 Text("change name")
             }
@@ -53,16 +51,16 @@ fun App() {
             )
 
             Button(onClick = {
-                viewModel.onAction(ExampleAction.UpdateAge(age.toInt()))
+                exampleViewModel.onAction(ExampleAction.UpdateAge(age.toInt()))
             }) {
                 Text("change age")
             }
 
             Button(onClick = {
 
-                if(viewModel.state.value.available)
-                viewModel.onAction(ExampleAction.MakeUnavailable)
-                else viewModel.onAction(ExampleAction.MakeAvailable)
+                if(exampleViewModel.state.value.available)
+                exampleViewModel.onAction(ExampleAction.MakeUnavailable)
+                else exampleViewModel.onAction(ExampleAction.MakeAvailable)
             }) {
                 Text("change availability")
             }
